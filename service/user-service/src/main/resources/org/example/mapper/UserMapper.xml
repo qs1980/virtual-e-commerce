@@ -6,6 +6,9 @@
         select id from user where email = #{email}
     </select>
     <select id="getByUserName" resultType="java.lang.Integer">
-        select id from user where user_name = #{username}
+        select id from user where username = #{username}
+    </select>
+    <select id="getUserByUsername" resultType="org.example.entity.UserEntity">
+        select * from user where username = #{username}
     </select>
 </mapper>

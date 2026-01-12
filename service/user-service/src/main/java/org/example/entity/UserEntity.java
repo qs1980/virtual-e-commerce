@@ -13,8 +13,8 @@ import java.util.Date;
 @TableName("user")
 public class UserEntity {
     private Long id;
-    private String userName;
-    private String passWord; // 存加密后的
+    private String username;
+    private String password; // 存加密后的
     private String email;
     private Date createTime;
 }

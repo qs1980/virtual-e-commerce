@@ -13,3 +13,20 @@ spring:
         server-addr: 127.0.0.1:8848
         namespace: public
         file-extension: yaml
+  datasource:
+    url: jdbc:mysql://localhost:3307/commerce?useSSL=false&serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: 123123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      # 连接池配置
+      minimum-idle: 5          # 最小空闲连接数
+      maximum-pool-size: 20    # 最大连接数
+      idle-timeout: 300000     # 空闲超时毫秒 (5分钟)
+      max-lifetime: 1800000    # 连接最大存活时间 (30分钟)
+      connection-timeout: 30000 # 获取连接超时时间 (30秒)
+      pool-name: HikariPool-1
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true  # 开启下划线 → 驼峰映射
+debug: true

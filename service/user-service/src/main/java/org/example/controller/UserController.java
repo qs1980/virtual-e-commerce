@@ -2,7 +2,9 @@ package org.example.controller;
 
 import jakarta.validation.Valid;
 import org.example.common.Result;
+import org.example.dto.UserLoginDTO;
 import org.example.dto.UserRegisterDTO;
+import org.example.dto.UserUpdateDTO;
 import org.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,5 +22,13 @@ public class UserController {
     @PostMapping("/register")
     public Result<String> register(@RequestBody @Valid UserRegisterDTO userDto) {
         return userService.register(userDto);
+    }
+    @PostMapping("/login")
+    public Result<String> login(@RequestBody @Valid UserLoginDTO userDto) {
+        return userService.login(userDto);
+    }
+    @PostMapping("/updateUser")
+    public Result<String> updateUser(@RequestBody @Valid UserUpdateDTO userDto) {
+        return userService.updateUser(userDto);
     }
 }

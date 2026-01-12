@@ -1,10 +1,10 @@
 package org.example.converter;
 
 import org.example.dto.UserRegisterDTO;
+import org.example.dto.UserUpdateDTO;
 import org.example.entity.UserEntity;
 import org.example.vo.UserVO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserConverter {
@@ -13,7 +13,9 @@ public interface UserConverter {
     UserEntity dtoToEntity(UserRegisterDTO dto);
 
     // Entity -> VO
-    @Mapping(target = "inStock", expression = "java(entity.getStock() > 0)") // 示例
     UserVO entityToVO(UserEntity entity);
+
+
+    UserEntity dtoToEntity(UserUpdateDTO dto);
 
 }
