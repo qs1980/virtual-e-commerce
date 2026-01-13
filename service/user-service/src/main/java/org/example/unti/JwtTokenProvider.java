@@ -16,7 +16,6 @@ public class JwtTokenProvider {
     private long validityInMilliseconds = 3600000; // 1小时过期时间
 
     public String createToken(UserEntity user) {
-        //todo 改为直接以对象生成token
         Claims claims = Jwts.claims().setId(String.valueOf(UUID.randomUUID())).setSubject(String.valueOf(user.getId())); // 用户id作为主体
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -36,7 +35,6 @@ public class JwtTokenProvider {
                 .getBody()
                 .getSubject();
     }
-
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
