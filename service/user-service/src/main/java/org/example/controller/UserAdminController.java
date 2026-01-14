@@ -8,6 +8,7 @@ import org.example.service.UserService;
 import org.example.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @RestController
@@ -16,7 +17,7 @@ public class UserAdminController {
     @Autowired
     private UserAdminService userAdminService;
     @GetMapping("/selectAllUser")
-    public StreamingResponseBody selectAllUser() {
+    public ResponseBodyEmitter selectAllUser() {
         return userAdminService.selectAllUser();
     }
 }

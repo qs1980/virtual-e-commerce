@@ -13,47 +13,32 @@ import org.example.service.UserAdminService;
 import org.example.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
+import java.util.concurrent.Executors;
 
 @Service
 public class UserAdminServiceImpl implements UserAdminService {
 
     @Autowired
-    private SqlSessionFactory sqlSessionFactory;
+    private UserAdminMapper userAdminMapper;
 
     @Override
-    public StreamingResponseBody selectAllUser() {
-
-        return outputStream -> {
-
-            ObjectMapper mapper = new ObjectMapper();
-            JsonGenerator generator = mapper.getFactory().createGenerator(outputStream);
-
-            generator.writeStartArray();
-
-            try (SqlSession session = sqlSessionFactory.openSession(ExecutorType.SIMPLE)) {
-
-                UserAdminMapper mapperProxy = session.getMapper(UserAdminMapper.class);
-
-                try (Cursor<UserEntity> cursor = mapperProxy.scanAll()) {
-                    for (UserEntity entity : cursor) {
-                        UserVO vo = convert(entity);
-                        mapper.writeValue(generator, vo);
-                    }
-                }
+    @Transactional(readOnly = true)
+    public ResponseBodyEmitter selectAllUser() {
+        ResponseBodyEmitter responseBodyEmitter = new ResponseBodyEmitter();
+        try (Cursor<UserEntity> cursor = userAdminMapper.scanAll()) {
+            for (UserEntity u : cursor) {
+                responseBodyEmitter.send(u);
             }
+            responseBodyEmitter.complete();
+        } catch (Exception e) {
+            responseBodyEmitter.completeWithError(e);
+        }
 
-            generator.writeEndArray();
-            generator.flush();
-        };
-    }
-
-    private UserVO convert(UserEntity entity) {
-        UserVO vo = new UserVO();
-        vo.setId(entity.getId());
-        vo.setUsername(entity.getUsername());
-        vo.setEmail(entity.getEmail());
-        return vo;
+        return responseBodyEmitter;
     }
 }
 
