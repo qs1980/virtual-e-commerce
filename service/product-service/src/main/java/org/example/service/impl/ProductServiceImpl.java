@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.example.common.Result;
+import org.example.converter.ProductConverter;
 import org.example.entity.ProductEntity;
 import org.example.mapper.ProductMapper;
 import org.example.service.ProductService;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+    @Autowired
+    ProductConverter productConverter;
     @Autowired
     private ProductMapper productMapper;
     @Cacheable(value = "productPage", key = "#pageNum + '_' + #size + '_' + (#kay == null ? '' : #kay)")
@@ -36,9 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
         // 4. 将实体转成 VO
         List<ProductVO> productVOList = productPage.getRecords().stream().map(entity -> {
-            ProductVO vo = new ProductVO();
-            BeanUtils.copyProperties(entity, vo);
-            return vo;
+            return productConverter.entityToVO(entity);
         }).collect(Collectors.toList());
 
         // 5. 返回结果
